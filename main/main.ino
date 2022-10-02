@@ -1,36 +1,34 @@
 #include <SPIFFS.h>
 #include <ArduinoJson.h>
- 
+#include <Arduino.h>
+#include <WiFi.h>
+#include <ESPAsyncWebServer.h>
+#include <AsyncTCP.h>
+
+char ssid[50];
+char password[50];
+char color[50];
+unsigned short gpio;
+unsigned short leds;
+unsigned short lightmode;
+
 void setup() {
   Serial.begin(115200);
-  
-  if(!SPIFFS.begin(true)){
-    Serial.println("An Error has occurred while mounting SPIFFS");
-    return;
+  config_load();
+  if(attemptConnection()) {
+    // controlerSite()
+  } else {
+    Serial.println("Launching AP: " + String(WiFi.softAP("esp32-led-controller") ? "Success" : "Fail")); // Launch the Access Point and print the status in serial monitor
+    config_write();
+    // configSite()
   }
-  
-  File file = SPIFFS.open("/config.json");
-  if(!file){
-    Serial.println("Failed to open file for reading");
-    return;
-  }
-
-  StaticJsonDocument<100> doc;
-  
-  DeserializationError error = deserializeJson(doc, file);
-  if (error) {
-    Serial.print("deserializeJson() failed: ");
-    Serial.println(error.c_str());
-    return;
-  }
-
-  const char* ssid = doc["ssid"]; // nullptr
-  const char* password = doc["password"]; // nullptr
-
-  Serial.println(ssid);
+  /* Serial.println(ssid);
   Serial.println(password);
-  
-  file.close();
+  Serial.println(gpio);
+  Serial.println(leds);
+  Serial.println(lightmode);
+  Serial.println(color);*/
+  //Serial.println("Launching AP: " + String(WiFi.softAP("esp32-led-controller") ? "Success" : "Fail")); // Launch the Access Point and print the status in serial monitor
 }
  
 void loop() {

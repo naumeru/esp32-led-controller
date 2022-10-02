@@ -1,4 +1,1 @@
-{
-    "ssid": "this is ssid",
-    "password": "this is password123"
-}
+{"ssid":"","password":"","gpio":"25","leds":"60","lightmode":"0","color":"blue"}
