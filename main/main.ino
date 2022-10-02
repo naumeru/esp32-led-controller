@@ -18,17 +18,11 @@ void setup() {
   if(attemptConnection()) {
     // controlerSite()
   } else {
+    WiFi.mode(WIFI_AP);
     Serial.println("Launching AP: " + String(WiFi.softAP("esp32-led-controller") ? "Success" : "Fail")); // Launch the Access Point and print the status in serial monitor
-    config_write();
+    // config_write();
     // configSite()
   }
-  /* Serial.println(ssid);
-  Serial.println(password);
-  Serial.println(gpio);
-  Serial.println(leds);
-  Serial.println(lightmode);
-  Serial.println(color);*/
-  //Serial.println("Launching AP: " + String(WiFi.softAP("esp32-led-controller") ? "Success" : "Fail")); // Launch the Access Point and print the status in serial monitor
 }
  
 void loop() {

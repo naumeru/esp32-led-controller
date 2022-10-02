@@ -52,8 +52,8 @@ void config_write() {
 
   DynamicJsonDocument doc(1024);
 
-  doc["ssid"] = "avocado";
-  doc["password"] = "flat20";
+  doc["ssid"] = "";
+  doc["password"] = "";
   doc["color"] = "green";
   doc["gpio"] = "2";
   doc["leds"] = "5";
