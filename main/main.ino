@@ -12,20 +12,48 @@ unsigned short gpio;
 unsigned short leds;
 unsigned short lightmode;
 
+bool test_credentials = false;
+
 AsyncWebServer server(80);
 
 void setup() {
   Serial.begin(115200);
   config_load();
-  if(attemptConnection()) {
+
+  if (attemptConnection()) {
     controlerSite();
   } else {
-    WiFi.mode(WIFI_AP);
+    WiFi.mode(WIFI_AP_STA);
     Serial.println("Launching AP: " + String(WiFi.softAP("esp32-led-controller") ? "Success" : "Fail")); // Launch the Access Point and print the status in serial monitor
     configSite();
   }
 }
- 
-void loop() {
 
+void loop() {
+  if (test_credentials) {
+    WiFi.begin(ssid, password);
+
+    unsigned int attempts = 0;
+    Serial.print("Connecting to WiFi ..");
+
+    int timestamp = esp_timer_get_time() / 1000000;
+    int previous_tick = esp_timer_get_time() / 1000000;
+
+    while (WiFi.status() != WL_CONNECTED && test_credentials == true) {
+      if (esp_timer_get_time() / 1000000 - timestamp >= 10) {
+        Serial.println(" Unsuccessful");
+        test_credentials = false;
+        return;
+      }
+      if (esp_timer_get_time() / 1000000 - previous_tick >= 1) {
+        Serial.print(".");
+        previous_tick = esp_timer_get_time() / 1000000;
+      }
+    }
+
+    Serial.println(" Successful");
+    Serial.print("Control panel IP: ");
+    Serial.println(WiFi.localIP());
+    test_credentials = false;
+  }
 }
