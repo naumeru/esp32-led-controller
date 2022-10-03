@@ -1,6 +1,6 @@
 #include <SPIFFS.h>
-#include <ArduinoJson.h>
 #include <Arduino.h>
+#include <ArduinoJson.h>
 #include <WiFi.h>
 #include <ESPAsyncWebServer.h>
 #include <AsyncTCP.h>
@@ -11,6 +11,8 @@ char color[50];
 unsigned short gpio;
 unsigned short leds;
 unsigned short lightmode;
+
+AsyncWebServer server(80);
 
 void setup() {
   Serial.begin(115200);
