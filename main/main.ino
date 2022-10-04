@@ -13,6 +13,9 @@ unsigned short leds;
 unsigned short lightmode;
 
 bool test_credentials = false;
+char conn_status[40] = "standby";
+
+
 
 AsyncWebServer server(80);
 
@@ -38,22 +41,26 @@ void loop() {
 
     int timestamp = esp_timer_get_time() / 1000000;
     int previous_tick = esp_timer_get_time() / 1000000;
+    strcpy(conn_status, "Connecting..");
 
     while (WiFi.status() != WL_CONNECTED && test_credentials == true) {
       if (esp_timer_get_time() / 1000000 - timestamp >= 10) {
         Serial.println(" Unsuccessful");
+        strcpy(conn_status, "Failed!");
         test_credentials = false;
         return;
       }
       if (esp_timer_get_time() / 1000000 - previous_tick >= 1) {
         Serial.print(".");
         previous_tick = esp_timer_get_time() / 1000000;
+        strcat(conn_status, ".");
       }
     }
 
     Serial.println(" Successful");
     Serial.print("Control panel IP: ");
     Serial.println(WiFi.localIP());
+    strcpy(conn_status, "Success");
     test_credentials = false;
   }
 }

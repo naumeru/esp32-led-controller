@@ -73,11 +73,6 @@ void config_write() {
   }
  
   file.close();
-  //for (int i = 5; i > 0; i--) {
-  //  Serial.print("Restarting in ");
-  //  Serial.println(i);
-  //  delay(1000);
-  //}
   Serial.println("Restarting now!");
   ESP.restart();
 }
