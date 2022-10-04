@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Connect to WiFi | naumeru/esp32-led-controller</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="custom.css">
+    <script src="jquery-3.6.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var timer = setInterval(function () {
+                $("#live_status").load(window.location.href + " #live_status");
+                if ($('#live_status:contains("Success")').length > 0) {
+                    $("#connected").load(window.location.href + " #connected");
+                    $("#success").show();
+                    $("#input").hide();
+                    $("#loader").hide();
+                    clearInterval(timer);
+                }
+                else if ($('#live_status:contains("Failed")').length > 0) {
+                    $("#input").show();
+                    $("#failed").show();
+                    $("#success").hide();
+                    $("#loader").hide();
+                }
+                else if ($('#live_status:contains("Connecting")').length > 0) {
+                    $("#input").hide();
+                    $("#success").hide();
+                    $("#loader").show();
+                }
+                else if ($('#live_status:contains("standby")').length > 0) {
+                    $("#input").show();
+                    $("#success").hide();
+                    $("#loader").hide();
+                }
+            }, 1000);
+        });
+    </script>
+</head>
+
+<body class="text-center" data-new-gr-c-s-check-loaded="14.1081.0" data-gr-ext-installed="">
+    <span id="live_status" style="color: #f5f5f5; position: absolute;">%conn_status%</span>
+
+    <main class="form-signin">
+        <h1 class="h3 mb-4 fw-normal">Connect to WiFi</h1>
+
+        <div class="d-flex justify-content-center">
+            <div class="loader" id="loader"></div>
+        </div>
+
+        <div id="input" style="display: none;">
+            <form action="/" method="POST" style="margin: 0px; padding: 0px;">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingInput" name="ssid" placeholder="SSID">
+                    <label for="floatingInput">Network SSID</label>
+                </div>
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="floatingPassword" name="password"
+                        placeholder="Password">
+                    <label for="floatingPassword">Password</label>
+                </div>
+                <div class="form-floating mb-2" id="failed" style="display: none;">
+                    Failed to connect. Try again!
+                </div>
+
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Connect</button>
+            </form>
+        </div>
+
+        <div id="success" style="display: none;">
+            <div id="connected">
+                <div class="form-floating mb-4">
+                    <button type="button" class="btn btn-success btn-sm mb-1" disabled>Status: Connected to
+                        %ssid%</button>
+                    <button type="button" class="btn btn-secondary btn-sm" disabled>Control Panel IP: %cpip%</button>
+                </div>
+                <form action="/restart" method="POST" style="margin: 0px; padding: 0px;">
+                    <button class="w-100 btn btn-lg btn-dark" type="submit">Restart to continue</button>
+                </form>
+            </div>
+        </div>
+        <p class="mt-3 mb-3 text-muted">&#169; github / naumeru</p>
+
+    </main>
+</body>
+
+</html>

@@ -73,11 +73,6 @@ void config_write() {
   }
  
   file.close();
-  for (int i = 5; i > 0; i--) {
-    Serial.print("Restarting in ");
-    Serial.println(i);
-    delay(1000);
-  }
   Serial.println("Restarting now!");
   ESP.restart();
 }
@@ -88,7 +83,7 @@ bool attemptConnection() {
     Serial.println("the ssid or password is empty");
     return false;
   }
-
+  WiFi.setHostname("esp32-led-controller");
   unsigned int attempts = 0;
   
   WiFi.mode(WIFI_STA);
