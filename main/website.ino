@@ -15,26 +15,29 @@ String processor(const String& var) {
 
 
 void controlerSite() {
-}
-
-void configSite() {
   server.on("/", HTTP_GET, [](AsyncWebServerRequest * request) {
-    request->send(SPIFFS, "/status.html", String(), false, processor);
+    request->send(SPIFFS, "/index.html", String(), false, processor);
   });
-
-  server.on("/status", HTTP_GET, [](AsyncWebServerRequest * request) {
-    request->send(SPIFFS, "/status.html", String(), false, processor);
-  });
-
-  server.serveStatic("/", SPIFFS, "/");
 
   server.on("/jquery-3.6.1.min.js", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SPIFFS, "/jquery-3.6.1.min.js", "text/javascript");
   });
   
-  server.on("/loader.css", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(SPIFFS, "/loader.css", "text/css");
+  server.serveStatic("/", SPIFFS, "/");
+  
+  server.begin();
+}
+
+void configSite() {
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest * request) {
+    request->send(SPIFFS, "/config.html", String(), false, processor);
   });
+
+  server.on("/jquery-3.6.1.min.js", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(SPIFFS, "/jquery-3.6.1.min.js", "text/javascript");
+  });
+  
+  server.serveStatic("/", SPIFFS, "/");
 
   server.on("/", HTTP_POST, [](AsyncWebServerRequest * request) {
     int params = request->params();
@@ -60,7 +63,8 @@ void configSite() {
 
   server.on("/restart", HTTP_POST, [](AsyncWebServerRequest * request) {
     Serial.println("esp32 restarted");
-    request->redirect("/");
+    ESP.restart();
+    request->send(200);
   });
 
   server.begin();

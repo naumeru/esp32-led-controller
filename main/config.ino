@@ -19,7 +19,6 @@ void config_load() {
   output[filesize] = '\0';
   Serial.println(output);  
 
-  DynamicJsonDocument doc(1024);
   DeserializationError err = deserializeJson(doc, output);
   if (err) {
     Serial.print(F("deserializeJson() failed with code "));
@@ -50,19 +49,16 @@ void config_write() {
     return;
   }
 
-  DynamicJsonDocument doc(1024);
-
-  doc["ssid"] = "";
-  doc["password"] = "";
+  doc["ssid"] = ssid;
+  doc["password"] = password;
   doc["color"] = "green";
   doc["gpio"] = "2";
   doc["leds"] = "5";
   doc["lightmode"] = "2";
 
   char input[300];
-  
   serializeJson(doc, input);
-
+  serializeJson(doc, Serial);
   int bytesWritten = file.print(input);
  
   if (bytesWritten > 0) {
@@ -71,10 +67,8 @@ void config_write() {
   } else {
     Serial.println("Config write failed");
   }
- 
+  
   file.close();
-  Serial.println("Restarting now!");
-  ESP.restart();
 }
 
 bool attemptConnection() {

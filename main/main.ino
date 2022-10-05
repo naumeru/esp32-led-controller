@@ -15,7 +15,7 @@ unsigned short lightmode;
 bool test_credentials = false;
 char conn_status[40] = "standby";
 
-
+DynamicJsonDocument doc(1024);
 
 AsyncWebServer server(80);
 
@@ -53,7 +53,6 @@ void loop() {
       if (esp_timer_get_time() / 1000000 - previous_tick >= 1) {
         Serial.print(".");
         previous_tick = esp_timer_get_time() / 1000000;
-        strcat(conn_status, ".");
       }
     }
 
@@ -61,6 +60,7 @@ void loop() {
     Serial.print("Control panel IP: ");
     Serial.println(WiFi.localIP());
     strcpy(conn_status, "Success");
+    config_write();
     test_credentials = false;
   }
 }
