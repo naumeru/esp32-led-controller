@@ -34,6 +34,7 @@ void config_load() {
   leds = atoi(doc["leds"]);
   gpio = atoi(doc["gpio"]);
   lightmode = atoi(doc["lightmode"]);
+  brightness = atoi(doc["brightness"]);
 
   file.close();
 }
@@ -59,6 +60,8 @@ void config_write() {
   doc["gpio"] = String(gpio);
   doc["leds"] = String(leds);
   doc["lightmode"] = "2";
+  doc["brightness"] = String(brightness);
+  
 
   char input[300];
   serializeJson(doc, input);

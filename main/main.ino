@@ -11,6 +11,7 @@ char color[50];
 unsigned short gpio;
 unsigned short leds;
 unsigned short lightmode;
+unsigned short brightness;
 
 bool test_credentials = false;
 char conn_status[40] = "standby";

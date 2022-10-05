@@ -15,6 +15,9 @@ String processor(const String& var) {
   else if (var == "leds") {
     return String(leds);
   }
+  else if (var == "brightness") {
+    return String(brightness);
+  }
 
   return String();
 }
