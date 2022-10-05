@@ -19,6 +19,8 @@ void config_load() {
   output[filesize] = '\0';
   Serial.println(output);  
 
+  DynamicJsonDocument doc(1024);
+  
   DeserializationError err = deserializeJson(doc, output);
   if (err) {
     Serial.print(F("deserializeJson() failed with code "));
@@ -49,11 +51,13 @@ void config_write() {
     return;
   }
 
+  DynamicJsonDocument doc(1024);
+  
   doc["ssid"] = ssid;
   doc["password"] = password;
   doc["color"] = "green";
-  doc["gpio"] = "2";
-  doc["leds"] = "5";
+  doc["gpio"] = String(gpio);
+  doc["leds"] = String(leds);
   doc["lightmode"] = "2";
 
   char input[300];

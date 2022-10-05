@@ -15,8 +15,6 @@ unsigned short lightmode;
 bool test_credentials = false;
 char conn_status[40] = "standby";
 
-DynamicJsonDocument doc(1024);
-
 AsyncWebServer server(80);
 
 void setup() {
