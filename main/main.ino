@@ -4,6 +4,7 @@
 #include <WiFi.h>
 #include <ESPAsyncWebServer.h>
 #include <AsyncTCP.h>
+#include <Adafruit_NeoPixel.h>
 
 char ssid[50];
 char password[50];
@@ -16,11 +17,16 @@ unsigned short brightness;
 bool test_credentials = false;
 char conn_status[40] = "standby";
 
-AsyncWebServer server(80);
+bool test_leds = false;
 
+AsyncWebServer server(80);
+Adafruit_NeoPixel pixels(60, 25, NEO_GRB + NEO_KHZ800);
 void setup() {
   Serial.begin(115200);
   config_load();
+
+  //Adafruit_NeoPixel pixels = 
+  pixels.begin();
 
   if (attemptConnection()) {
     controlerSite();
@@ -62,4 +68,14 @@ void loop() {
     config_write();
     test_credentials = false;
   }
+
+  if (test_leds) {
+    pixels.clear();
+    for (int i = 0; i < leds; i++) {
+      pixels.setPixelColor(i, pixels.Color(0, 0, 150));
+      pixels.show();   // Send the updated pixel colors to the hardware.
+    }
+    test_leds = false;
+  }
+
 }

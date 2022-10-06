@@ -62,6 +62,7 @@ void controlerSite() {
   });
 
   server.on("/back", HTTP_POST, [](AsyncWebServerRequest * request) {
+    test_leds = true;
     request->redirect("/");
   });
   
