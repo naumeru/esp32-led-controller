@@ -9,7 +9,7 @@
 char ssid[50];
 char password[50];
 char color[50];
-unsigned short gpio;
+int gpio;
 unsigned short leds;
 unsigned short lightmode;
 unsigned short brightness;
@@ -20,13 +20,10 @@ char conn_status[40] = "standby";
 bool test_leds = false;
 
 AsyncWebServer server(80);
-Adafruit_NeoPixel pixels(60, 25, NEO_GRB + NEO_KHZ800);
+
 void setup() {
   Serial.begin(115200);
   config_load();
-
-  //Adafruit_NeoPixel pixels = 
-  pixels.begin();
 
   if (attemptConnection()) {
     controlerSite();
@@ -36,6 +33,11 @@ void setup() {
     configSite();
   }
 }
+
+#define gpio_pin
+#define ledss 60
+
+Adafruit_NeoPixel pixels(ledss, 25, NEO_GRB + NEO_KHZ800);
 
 void loop() {
   if (test_credentials) {
@@ -70,7 +72,7 @@ void loop() {
   }
 
   if (test_leds) {
-    pixels.clear();
+    pixels.begin();
     for (int i = 0; i < leds; i++) {
       pixels.setPixelColor(i, pixels.Color(0, 0, 150));
       pixels.show();   // Send the updated pixel colors to the hardware.
